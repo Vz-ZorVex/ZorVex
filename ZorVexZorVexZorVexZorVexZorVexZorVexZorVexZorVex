@@ -77,7 +77,7 @@ local function buildUI()
         Font = Enum.Font.Gotham,
         TextSize = 14,
         Text = "1",
-        PlaceholderText = "Interval (detik)",
+        PlaceholderText = "tunda loncat (detik)",
         BorderSizePixel = 0
     })
 
