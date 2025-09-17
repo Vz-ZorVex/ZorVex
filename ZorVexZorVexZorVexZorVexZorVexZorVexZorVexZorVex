@@ -30,7 +30,7 @@ local function buildUI()
 
     local frame = new("Frame", gui, {
         Name = "MainFrame",
-        Size = UDim2.new(0, 250, 0, 170),
+        Size = UDim2.new(0, 190, 0, 125),
         Position = UDim2.new(0.5, -125, 0.5, -85),
         BackgroundColor3 = hex("363636"),
         BorderSizePixel = 0,
@@ -70,7 +70,7 @@ local function buildUI()
     })
 
     local inputBox = new("TextBox", frame, {
-        Size = UDim2.new(0.8, 0, 0, 26),
+        Size = UDim2.new(0.8, 0, 0, 25),
         Position = UDim2.new(0.1, 0, 0.24, 0),
         BackgroundColor3 = hex("959595"),
         TextColor3 = hex("363636"),
@@ -82,7 +82,7 @@ local function buildUI()
     })
 
     local toggleBtn = new("TextButton", frame, {
-        Size = UDim2.new(0.8, 0, 0, 26),
+        Size = UDim2.new(0.8, 0, 0, 25),
         Position = UDim2.new(0.1, 0, 0.5, 0),
         BackgroundColor3 = hex("FFFFFF"),
         Text = "Start",
@@ -93,7 +93,7 @@ local function buildUI()
     })
 
     local counter = new("TextLabel", frame, {
-        Size = UDim2.new(0.8, 0, 0, 26),
+        Size = UDim2.new(0.8, 0, 0, 25),
         Position = UDim2.new(0.1, 0, 0.74, 0),
         BackgroundTransparency = 1,
         Text = "Jumlah Lompatan : 0",
@@ -138,13 +138,13 @@ local function buildUI()
     table.insert(connections, miniBtn.MouseButton1Click:Connect(function()
         minimized = not minimized
         if minimized then
-            frame.Size = UDim2.new(0, 250, 0, 30)
+            frame.Size = UDim2.new(0, 190, 0, 30)
             miniBtn.Text = "+"
             inputBox.Visible = false
             toggleBtn.Visible = false
             counter.Visible = false
         else
-            frame.Size = UDim2.new(0, 250, 0, 170)
+            frame.Size = UDim2.new(0, 190, 0, 125)
             miniBtn.Text = "–"
             inputBox.Visible = true
             toggleBtn.Visible = true
