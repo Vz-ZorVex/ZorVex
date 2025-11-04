@@ -15,12 +15,12 @@ end
 
 WindUI:Popup({
     Title = "Welcome to ZorVex",
-    Icon = "Vz",
+    Icon = "Bird",
     Content = "Halo Opet",
     Buttons = {
         {
             Title = "Masih New",
-            Icon = "Opet",
+            Icon = "Bird",
         }
     }
 })
@@ -30,7 +30,7 @@ local Window = WindUI:CreateWindow({
     Title = "Team | Vuzo Zilux",
     Author = "By ZorVex",
     Folder = "Vuzo Zilux",
-    Icon = "By",
+    Icon = "Bird",
     NewElements = true,
     --Size = UDim2.fromOffset(500,500),
     
