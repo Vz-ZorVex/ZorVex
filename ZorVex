@@ -32,14 +32,14 @@ local Window = WindUI:CreateWindow({
     Folder = "Vuzo Zilux",
     Icon = "bird",
     NewElements = true,
-    --Size = UDim2.fromOffset(700,700),
+    --Size = UDim2.fromOffset(500,500),
     
     HideSearchBar = false,
     
     OpenButton = {
         Title = "Team Vz", -- can be changed
         CornerRadius = UDim.new(1,0), -- fully rounded
-        StrokeThickness = 3, -- removing outline
+        StrokeThickness = 0, -- removing outline
         Enabled = true, -- enable or disable openbutton
         Draggable = true,
         OnlyMobile = false,
@@ -57,9 +57,9 @@ local Window = WindUI:CreateWindow({
 -- */  Tags  /* --
 do
     Window:Tag({
-        Title = "v" .. WindUI.Version,
-        Icon = "github",
-        Color = Color3.fromHex("#6b31ff")
+        Title = "Vz" .. WindUI.Version,
+        Icon = "  ",
+        Color = Color3.fromHex("#ff0000")
     })
 end
 
