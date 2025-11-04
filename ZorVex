@@ -14,12 +14,12 @@ end
 
 
 WindUI:Popup({
-    Title = "Welcome to the WindUI!",
+    Title = "Welcome to ZorVex",
     Icon = "bird",
-    Content = "Hello!",
+    Content = "Halo Opet",
     Buttons = {
         {
-            Title = "Hahaha",
+            Title = "Masih New",
             Icon = "bird",
         }
     }
@@ -37,7 +37,7 @@ local Window = WindUI:CreateWindow({
     HideSearchBar = false,
     
     OpenButton = {
-        Title = "Open .ftgs hub UI", -- can be changed
+        Title = "Team Vz", -- can be changed
         CornerRadius = UDim.new(1,0), -- fully rounded
         StrokeThickness = 3, -- removing outline
         Enabled = true, -- enable or disable openbutton
