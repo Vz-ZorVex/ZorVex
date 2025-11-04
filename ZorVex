@@ -15,12 +15,12 @@ end
 
 WindUI:Popup({
     Title = "Welcome to ZorVex",
-    Icon = "Bird",
+    Icon = "bird",
     Content = "Halo Opet",
     Buttons = {
         {
             Title = "Masih New",
-            Icon = "Bird",
+            Icon = "bird",
         }
     }
 })
@@ -30,14 +30,14 @@ local Window = WindUI:CreateWindow({
     Title = "Team | Vuzo Zilux",
     Author = "By ZorVex",
     Folder = "Vuzo Zilux",
-    Icon = "Bird",
+    Icon = "bird",
     NewElements = true,
     --Size = UDim2.fromOffset(500,500),
     
     HideSearchBar = false,
     
     OpenButton = {
-        Title = "Team Vz", -- can be changed
+        Title = "Vuzo Zilux", -- can be changed
         CornerRadius = UDim.new(1,0), -- fully rounded
         StrokeThickness = 0, -- removing outline
         Enabled = true, -- enable or disable openbutton
