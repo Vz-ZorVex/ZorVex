@@ -27,9 +27,9 @@ WindUI:Popup({
 
 -- */  Window  /* --
 local Window = WindUI:CreateWindow({
-    Title = ".ftgs hub  |  WindUI Example",
-    Author = "by .ftgs • Footagesus",
-    Folder = "ftgshub",
+    Title = "Team | Vuzo Zilux",
+    Author = "By ZorVex",
+    Folder = "Vuzo Zilux",
     Icon = "bird",
     NewElements = true,
     --Size = UDim2.fromOffset(700,700),
