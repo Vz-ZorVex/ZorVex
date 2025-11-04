@@ -1502,12 +1502,12 @@ New=a.load'g'.New
 
 return[[
 {
-    "name": "windui",
-    "version": "1.6.61",
+    "name": "vz",
+    "version": "1",
     "main": "./dist/main.lua",
     "repository": "https://github.com/Footagesus/WindUI",
     "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",
-    "author": "Footagesus",
+    "author": "ZorVex",
     "description": "Roblox UI Library for scripts",
     "license": "MIT",
     "scripts": {
