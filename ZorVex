@@ -45,8 +45,8 @@ local Window = WindUI:CreateWindow({
         OnlyMobile = false,
         
         Color = ColorSequence.new( -- gradient
-            Color3.fromHex("#30FF6A"), 
-            Color3.fromHex("#e7ff2f")
+            Color3.fromHex("#808080"), 
+            Color3.fromHex("#808080")
         )
     }
 })
