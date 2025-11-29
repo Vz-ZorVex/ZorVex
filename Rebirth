@@ -1,0 +1,430 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/memejames/elerium-v2-ui-library/main/Library", true))()
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local startTime = os.time()
+local startRebirths = player.leaderstats.Rebirths.Value
+local displayName = player.DisplayName
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local displayName = LocalPlayer.DisplayName
+
+local window = library:AddWindow("                           Team      |      Vuzo Zilux                            ", { 
+    main_color = Color3.fromRGB(25, 25, 25), 
+    min_size = Vector2.new(350, 365), 
+    can_resize = true, 
+})
+
+local StrengthTab = window:AddTab("Push Strength")
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+local muscleEvent = LocalPlayer:WaitForChild("muscleEvent")
+
+local doPushups = false
+local doSitups = false
+local doHandstands = false
+local durabilityNeeded = 10000000
+
+local function punchRock()
+	local char = LocalPlayer.Character
+	local bp = LocalPlayer.Backpack
+	local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+
+	if char and bp and humanoid then
+		local punch = bp:FindFirstChild("Punch")
+		if punch and not char:FindFirstChild("Punch") then
+			humanoid:EquipTool(punch)
+		end
+
+		local inst = char:FindFirstChild("Punch")
+		if inst and inst:FindFirstChild("attackTime") then
+			inst.attackTime.Value = 0.001
+			muscleEvent:FireServer("punch", "rightHand")
+			muscleEvent:FireServer("punch", "leftHand")
+			inst:Activate()
+		end
+	end
+end
+
+local function tryRockTouch()
+	local char = LocalPlayer.Character
+	if LocalPlayer.Durability.Value >= durabilityNeeded then
+		for _, v in pairs(workspace.machinesFolder:GetDescendants()) do
+			if v.Name == "neededDurability" and v.Value == durabilityNeeded then
+				local rock = v.Parent:FindFirstChild("Rock")
+				if rock and char and char:FindFirstChild("RightHand") and char:FindFirstChild("LeftHand") then
+					firetouchinterest(rock, char.RightHand, 0)
+					firetouchinterest(rock, char.RightHand, 1)
+					firetouchinterest(rock, char.LeftHand, 0)
+					firetouchinterest(rock, char.LeftHand, 1)
+					punchRock()
+				end
+			end
+		end
+	end
+end
+
+local function doRep(toolName)
+	local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+	local humanoid = char:FindFirstChildOfClass("Humanoid")
+	local bp = LocalPlayer.Backpack
+
+	if not char:FindFirstChild(toolName) then
+		local tool = bp:FindFirstChild(toolName)
+		if tool and humanoid then
+			humanoid:EquipTool(tool)
+		end
+	end
+
+	muscleEvent:FireServer("rep")
+end
+
+task.spawn(function()
+	while true do
+		if doPushups then
+			doRep("Pushups")
+			tryRockTouch()
+		end
+		if doSitups then
+			doRep("Situps")
+			tryRockTouch()
+		end
+		if doHandstands then
+			doRep("Handstands")
+			tryRockTouch()
+		end
+		task.wait(0.1)
+	end
+end)
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+	char:WaitForChild("HumanoidRootPart")
+	task.wait(2)
+	warn("[RESPAWN] Player respawned â€” OP FARM auto-resumed.")
+end)
+
+StrengthTab:AddSwitch("Pushups + Jungle Rock", function(state)
+	doPushups = state
+end, { Weight = 1 })
+
+StrengthTab:AddSwitch("Situps + Jungle Rock", function(state)
+	doSitups = state
+end, { Weight = 2 })
+
+StrengthTab:AddSwitch("Handstands + Jungle Rock", function(state)
+	doHandstands = state
+end, { Weight = 3 })
+
+StrengthTab:AddLabel("Protein Eggs").TextSize = 15
+
+local function activateProteinEgg()
+    local tool = player.Character:FindFirstChild("Protein Egg") or player.Backpack:FindFirstChild("Protein Egg")
+    if tool then
+        muscleEvent:FireServer("proteinEgg", tool)
+    end
+end
+
+local running = false
+
+task.spawn(function()
+    while true do
+        if running then
+            activateProteinEgg()
+            task.wait(1800)
+        else
+            task.wait(1)
+        end
+    end
+end)
+
+local switch = StrengthTab:AddSwitch("Auto Eat Egg | 30mins", function(state)
+    running = state
+    if state then
+        activateProteinEgg()
+    end
+end)
+switch:Set(false)
+
+local rebirthTab = window:AddTab("Rebirth")
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+local rebirthTarget = 0
+local rebirthingToTarget = false
+local teleportActive = false
+_G.FastWeight = false
+_G.autoSizeActive = false
+
+rebirthTab:AddTextBox("Rebirth Target", function(text)
+	rebirthTarget = tonumber(text) or 0
+end)
+
+rebirthTab:AddSwitch("Auto Rebirth Target", function(bool)
+	rebirthingToTarget = bool
+
+	task.spawn(function()
+		while rebirthingToTarget do
+			local player = LocalPlayer
+			local leaderstats = player:FindFirstChild("leaderstats")
+			local rebirths = leaderstats and leaderstats:FindFirstChild("Rebirths")
+
+			if rebirths and rebirths.Value >= rebirthTarget then
+				rebirthingToTarget = false
+				break
+			end
+
+			ReplicatedStorage.rEvents.rebirthRemote:InvokeServer("rebirthRequest")
+			task.wait(0.1)
+		end
+	end)
+end)
+
+rebirthTab:AddSwitch("Auto Weight", function(bool)
+	_G.FastWeight = bool
+
+	if bool then
+		task.spawn(function()
+			while _G.FastWeight do
+				local player = LocalPlayer
+				local char = player.Character
+				if char and not char:FindFirstChild("Weight") then
+					local weightTool = player.Backpack:FindFirstChild("Weight")
+					if weightTool then
+						if weightTool:FindFirstChild("repTime") then
+							weightTool.repTime.Value = 0
+						end
+						char.Humanoid:EquipTool(weightTool)
+					end
+				elseif char and char:FindFirstChild("Weight") then
+					local equipped = char:FindFirstChild("Weight")
+					if equipped:FindFirstChild("repTime") then
+						equipped.repTime.Value = 0
+					end
+				end
+				task.wait(0.1)
+			end
+		end)
+
+		task.spawn(function()
+			while _G.FastWeight do
+				LocalPlayer.muscleEvent:FireServer("rep")
+				task.wait(0)
+			end
+		end)
+	else
+		local char = LocalPlayer.Character
+		local equipped = char and char:FindFirstChild("Weight")
+		if equipped then
+			if equipped:FindFirstChild("repTime") then
+				equipped.repTime.Value = 1
+			end
+			equipped.Parent = LocalPlayer.Backpack
+		end
+		local backpackTool = LocalPlayer.Backpack:FindFirstChild("Weight")
+		if backpackTool and backpackTool:FindFirstChild("repTime") then
+			backpackTool.repTime.Value = 1
+		end
+	end
+end)
+
+rebirthTab:AddSwitch("Auto Size 1", function(bool)
+	_G.autoSizeActive = bool
+	if bool then
+		task.spawn(function()
+			while _G.autoSizeActive and task.wait() do
+				ReplicatedStorage.rEvents.changeSpeedSizeRemote:InvokeServer("changeSize", 0)
+			end
+		end)
+	end
+end, "Auto Set Size 1")
+
+local targetPosition = CFrame.new(-8742, 121, -5858)
+rebirthTab:AddSwitch("Auto Teleport King", function(enabled)
+	teleportActive = enabled
+end)
+
+task.spawn(function()
+	while true do
+		if teleportActive then
+			local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+			local hrp = char:WaitForChild("HumanoidRootPart")
+			if (hrp.Position - targetPosition.Position).Magnitude > 5 then
+				hrp.CFrame = targetPosition
+			end
+		end
+		task.wait(0.05)
+	end
+end)
+
+local frameToggle = rebirthTab:AddSwitch("Hide Frames", function(bool)
+    local rSto = game:GetService("ReplicatedStorage")
+    for _, obj in pairs(rSto:GetChildren()) do
+        if obj.Name:match("Frame$") then
+            obj.Visible = not bool
+        end
+    end
+end)
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+	char:WaitForChild("HumanoidRootPart")
+	task.wait(2)
+	warn("[RESPAWN] Character respawned â€” continuing automation...")
+
+	if _G.FastWeight then
+		task.spawn(function()
+			while _G.FastWeight do
+				local player = LocalPlayer
+				local c = player.Character
+				if c and not c:FindFirstChild("Weight") then
+					local tool = player.Backpack:FindFirstChild("Weight")
+					if tool then
+						c.Humanoid:EquipTool(tool)
+					end
+				end
+				LocalPlayer.muscleEvent:FireServer("rep")
+				task.wait(0.1)
+			end
+		end)
+	end
+
+	if _G.autoSizeActive then
+		task.spawn(function()
+			while _G.autoSizeActive do
+				ReplicatedStorage.rEvents.changeSpeedSizeRemote:InvokeServer("changeSize", 0)
+				task.wait(0.2)
+			end
+		end)
+	end
+
+	if teleportActive then
+		task.spawn(function()
+			local hrp = char:WaitForChild("HumanoidRootPart")
+			while teleportActive do
+				if (hrp.Position - targetPosition.Position).Magnitude > 5 then
+					hrp.CFrame = targetPosition
+				end
+				task.wait(0.05)
+			end
+		end)
+	end
+end)
+
+local switch = rebirthTab:AddSwitch("Anti‑AFK", function(state)
+    if state then
+        local Players = game:GetService("Players")
+        local VirtualUser = game:GetService("VirtualUser")
+        local LocalPlayer = Players.LocalPlayer
+
+        _G.afkGui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
+        _G.afkGui.Name = "AntiAFKGui"
+        _G.afkGui.ResetOnSpawn = false
+
+        local title = Instance.new("TextLabel", _G.afkGui)
+        title.Size = UDim2.new(0, 200, 0, 50)
+        title.Position = UDim2.new(1, -210, 0, -50)
+        title.Text = "Farm Time"
+        title.TextColor3 = Color3.fromRGB(39, 39, 39)
+        title.Font = Enum.Font.GothamBold
+        title.TextSize = 20
+        title.BackgroundTransparency = 1
+        title.TextTransparency = 0                     -- tetap terlihat
+
+        local titleStroke = Instance.new("UIStroke", title)
+        titleStroke.Thickness = 1
+        titleStroke.Color = Color3.fromRGB(255, 255, 255)
+
+        local timer = Instance.new("TextLabel", _G.afkGui)
+        timer.Size = UDim2.new(0, 200, 0, 30)
+        timer.Position = UDim2.new(1, -210, 0, -20)
+        timer.Text = "00:00:00"
+        timer.TextColor3 = Color3.fromRGB(255, 255, 255)
+        timer.Font = Enum.Font.GothamBold
+        timer.TextSize = 18
+        timer.BackgroundTransparency = 1
+        timer.TextTransparency = 0                     -- tetap terlihat
+
+        local timerStroke = Instance.new("UIStroke", timer)
+        timerStroke.Thickness = 2
+        timerStroke.Color = Color3.fromRGB(39, 39, 39)
+
+        local startTime = tick()
+
+        task.spawn(function()
+            while _G.afkGui and _G.afkGui.Parent do
+                local elapsed = tick() - startTime
+                local h = math.floor(elapsed / 3600)
+                local m = math.floor((elapsed % 3600) / 60)
+                local s = math.floor(elapsed % 60)
+                timer.Text = string.format("%02d:%02d:%02d", h, m, s)
+                task.wait(1)
+            end
+        end)
+
+        -- Tidak ada loop fade di sini, jadi teks tidak berkedip
+
+        _G.afkConnection = Players.LocalPlayer.Idled:Connect(function()
+            VirtualUser:Button2Down(Vector2.new(), workspace.CurrentCamera.CFrame)
+            task.wait(1)
+            VirtualUser:Button2Up(Vector2.new(), workspace.CurrentCamera.CFrame)
+        end)
+    else
+        if _G.afkConnection then
+            _G.afkConnection:Disconnect()
+            _G.afkConnection = nil
+        end
+        if _G.afkGui then
+            _G.afkGui:Destroy()
+            _G.afkGui = nil
+        end
+    end
+end)
+
+local miscTab = window:AddTab("Buy Ultimate")
+
+local ultimateOptions = {
+    "+1 Daily Spin",
+    "+1 Pet Slot",
+    "+10 Item Capacity",
+    "+5% Rep Speed",
+    "Demon Damage",
+    "Galaxy Gains",
+    "Golden Rebirth",
+    "Jungle Swift",
+    "Muscle Mind",
+    "x2 Chest Rewards",
+    "x2 Quest Rewards"
+}
+
+local autoUltimateToggles = {}
+
+for _, ultimate in ipairs(ultimateOptions) do
+    autoUltimateToggles[ultimate] = false
+    
+    miscTab:AddSwitch("Auto Buy " .. ultimate, function(state)
+        autoUltimateToggles[ultimate] = state
+
+        if state then
+            task.spawn(function()
+                while autoUltimateToggles[ultimate] do
+                    pcall(function()
+                        game:GetService("ReplicatedStorage").rEvents.ultimatesRemote:InvokeServer(
+                            "upgradeUltimate",
+                            ultimate
+                        )
+                    end)
+                    task.wait(1)
+                end
+            end)
+        end
+    end)
+end
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
